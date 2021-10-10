@@ -99,7 +99,7 @@ bool endEngine::Update()
 	if (con.whoIsHeld != nullptr)
 	{
 		poses.append(Eigen::Vector2f(mSt.x,mSt.y));
-		
+		con.whoIsHeld->changeDir(poses.getDiff());
 		con.whoIsHeld->setPos(mSt.x,mSt.y);
 	}
 
