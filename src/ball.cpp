@@ -120,7 +120,7 @@ void ball::bump(ball& first, ball& second)
 {
 	const Eigen::Vector2f firstdir = first.dir;
 	const Eigen::Vector2f seconddir = second.dir;
-	double myTheta =  theta(Eigen::Vector2f(firstdir - seconddir));
+	double myTheta =  theta(Eigen::Vector2f(first.getPos() - second.getPos()));
 	double secTheta = myTheta * -1;
 	const Eigen::Rotation2Df t(myTheta);
 	const Eigen::Rotation2Df c(myTheta);
