@@ -3,6 +3,9 @@
 #include <string>
 #include <algorithm>
 #include <iostream>
+
+
+
 class parser
 {
 private:
@@ -19,5 +22,7 @@ public:
 	static int ballQuan;
 	static int maxFPS;
 	static float speedModifyer;
+	static float soundVolume;
+	static bool noText;
 };
 

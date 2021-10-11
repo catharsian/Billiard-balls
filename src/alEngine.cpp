@@ -15,6 +15,9 @@ void baseEngine::initialize()
 	al_init_ttf_addon();
 	al_install_keyboard();
 	al_install_mouse();
+	al_init_acodec_addon();
+	al_install_audio();
+	al_reserve_samples(300);
 }
 
 baseEngine::baseEngine()
@@ -33,5 +36,6 @@ baseEngine::~baseEngine()
 	al_destroy_display			(disp);
 	al_uninstall_keyboard		();
 	al_uninstall_mouse			();
+	al_uninstall_audio			();
 	
 }

@@ -83,6 +83,8 @@ void parser::parse(const std::string filepath)
 		setIf(ballQuan, "ballquan", line, file);
 		setIf(maxFPS, "maxfps", line, file);
 		setIf(speedModifyer, "speedmodifyer", line, file);
+		setIf(soundVolume, "soundvolume", line, file);
+		setIf(noText, "notext", line, file);
 	}
 	file.close();
 }
@@ -94,4 +96,6 @@ void parser::initialize()
 	ballQuan = 50;
 	maxFPS = 90;
 	speedModifyer = 0.2f;
+	soundVolume = 0.4f;
+	noText = true;
 }

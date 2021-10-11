@@ -1,6 +1,8 @@
 #pragma once
 #include "alEngine.h"
 
+
+// implementation of an acceleration after ball releasing
 struct mouseSpline
 {
 	Eigen::Vector2f* ps;
@@ -50,8 +52,18 @@ struct mouseSpline
 	{
 		delete[] ps;
 	}
-
+	void setAll(const Eigen::Vector2f setTo)
+	{
+		for (int i = 0; i < n; ++i)
+		{
+			ps[i] = setTo;
+		}
+	}
 };
+
+
+
+
 
 
 class endEngine : public baseEngine

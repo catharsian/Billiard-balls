@@ -22,13 +22,50 @@ int parser::SCREENWIDTH;
 int parser::maxFPS;
 int parser::ballQuan;
 float parser::speedModifyer;
+float parser::soundVolume;
+bool parser::noText;
 ALLEGRO_FONT* ball::fon;
 Time gameTime;
+AudioParser ballCon::sounds;
 
 double theta(Eigen::Vector2f vec)
 {
 	return atan2(vec.x(), vec.y());
 }
+
+void AudioParser::addOne(ALLEGRO_SAMPLE* newsamp)
+{
+	if (newsamp)
+	{
+		samps.push_back(newsamp);
+		//insts.push_back(al_create_sample_instance(newsamp));
+	}
+
+}
+
+
+
+
+
+void AudioParser::playRandom()
+{
+	if (samps.size()) {
+		const char gened = randomizer::gen() % samps.size();
+		al_play_sample(samps[gened], parser::soundVolume , 0.0f, 1.0f, ALLEGRO_PLAYMODE_ONCE, 0);
+	}
+}
+
+AudioParser::~AudioParser()
+{
+	for (auto& snd : samps)
+	{
+		al_destroy_sample(snd);
+	}
+}
+
+
+
+
 
 Eigen::Vector2f ball::getPos() const
 {
@@ -68,7 +105,8 @@ void ball::drawMe() const
 	{
 		al_draw_filled_circle(pos.x(), pos.y(), rad, col);
 	}
-	al_draw_text(fon, al_map_rgb(0, 0, 0), pos.x() - 7, pos.y() - 6, 0, std::to_string(rad).c_str());
+	if (!parser::noText)
+		al_draw_text(fon, al_map_rgb(0, 0, 0), pos.x() - 7, pos.y() - 6, 0, std::to_string(rad).c_str());
 }
 
 void ball::go()
@@ -86,15 +124,17 @@ void ball::go()
 	if (forX > parser::SCREENWIDTH - rad)
 	{
 		pos << parser::SCREENWIDTH - rad, pos.y();
-		dir = Eigen::Vector2f(dir.x() * -1 + 1, dir.y());
-		accel *= -1;
+		dir << dir.x() * -1, dir.y();
+		if (dir.dot(accel) < 0)
+			accel << accel.x() * -1, accel.y();
 
 	}
 	else if (forX < rad)
 	{
 		pos << rad, pos.y();
-		dir = Eigen::Vector2f(dir.x() * -1 - 1, dir.y());
-		accel *= -1;
+		dir << dir.x() * -1, dir.y();
+		if (dir.dot(accel) < 0)
+			accel << accel.x() * -1, accel.y();
 	}
 	pos += dir * parser::speedModifyer * gameTime.delta;
 	if (dir.dot(accel) > 0)
@@ -184,6 +224,12 @@ ballCon::ballCon()
 		}
 	}
 	whoIsHeld = nullptr;
+	ALLEGRO_SAMPLE* samp = al_load_sample("./snd/outp1.wav");
+	sounds.addOne(samp);
+	samp = al_load_sample("./snd/outp2.wav");
+	sounds.addOne(samp);
+	samp = al_load_sample("./snd/outp3.wav");
+	sounds.addOne(samp);
 
 }
 
@@ -229,9 +275,10 @@ void ballCon::checkAll()
 					if ((first.getPos() - second.getPos()).norm() < (second.getRad() + first.getRad()))
 					{
 						ball::moveUs(const_cast<ball&>(first), const_cast<ball&>(second));
-							ball::bump(const_cast<ball&>(first), const_cast<ball&>(second));
-							const_cast<ball&>(first).bumped = true;
-							const_cast<ball&>(second).bumped = true;
+						ball::bump(const_cast<ball&>(first), const_cast<ball&>(second));
+						const_cast<ball&>(first).bumped = true;
+						const_cast<ball&>(second).bumped = true;
+						sounds.playRandom();
 					}
 			const_cast<ball&>(first).go();
 			}

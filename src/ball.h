@@ -8,6 +8,21 @@ struct Time
 };
 extern Time gameTime;
 
+
+
+class AudioParser
+{
+protected:
+	std::vector<ALLEGRO_SAMPLE*> samps;
+
+public:
+	void addOne(ALLEGRO_SAMPLE* newsamp);
+
+	void playRandom();
+	~AudioParser();
+};
+
+
 class ball
 {
 private:
@@ -43,8 +58,8 @@ private:
 
 	ball* cont;
 
-
 public:
+	static AudioParser sounds;
 	void findOne(int mX, int mY);
 	static std::vector<float> OverlappsX;
 	static std::vector<float> OverlappsY;

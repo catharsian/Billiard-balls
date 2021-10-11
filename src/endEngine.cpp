@@ -35,13 +35,12 @@ endEngine::endEngine()
 	mouseHeld = false;
 	mX = 0;
 	mY = 0;
-	poses.Create(5);
+	poses.Create(parser::maxFPS / 18);
 }
 //Time gameTime;
 
 void endEngine::Start()
 {
-
 	disp = al_create_display(parser::SCREENWIDTH, parser::SCREENHEIGHT);
 	tim = al_create_timer(float(1) / float(parser::maxFPS));
 	sec = al_create_timer(1);
@@ -81,7 +80,8 @@ bool endEngine::Update()
 		mouseHeld = true;
 
 		con.findOne(mSt.x, mSt.y);
-		
+		poses.setAll(Eigen::Vector2f(mSt.x, mSt.y));
+
 	}
 	else
 	if (!(mSt.buttons & 1) && mouseHeld)
@@ -99,8 +99,8 @@ bool endEngine::Update()
 	if (con.whoIsHeld != nullptr)
 	{
 		poses.append(Eigen::Vector2f(mSt.x,mSt.y));
-		con.whoIsHeld->changeDir(poses.getDiff());
 		con.whoIsHeld->setPos(mSt.x,mSt.y);
+		con.whoIsHeld->changeDir(poses.getDiff());
 	}
 
 
