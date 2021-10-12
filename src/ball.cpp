@@ -124,17 +124,18 @@ void ball::go()
 	if (forX > parser::SCREENWIDTH - rad)
 	{
 		pos << parser::SCREENWIDTH - rad, pos.y();
-		dir << dir.x() * -1, dir.y();
-		if (dir.dot(accel) < 0)
-			accel << accel.x() * -1, accel.y();
-
+		//dir << dir.x() * -1, dir.y();
+		//if (dir.dot(accel) < 0)
+		//	accel << accel.x() * -1, accel.y();
+		changeDir(Eigen::Vector2f(dir.x() * -0.9f, dir.y()));
 	}
 	else if (forX < rad)
 	{
-		pos << rad, pos.y();
-		dir << dir.x() * -1, dir.y();
+		//dir << dir.x() * -1, dir.y();
+		pos << rad, pos.y(); /*
 		if (dir.dot(accel) < 0)
-			accel << accel.x() * -1, accel.y();
+			accel << accel.x() * -1, accel.y();*/
+		changeDir(Eigen::Vector2f(dir.x() * -0.9f, dir.y()));
 	}
 	pos += dir * parser::speedModifyer * gameTime.delta;
 	if (dir.dot(accel) > 0)
